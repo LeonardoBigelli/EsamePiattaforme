@@ -5,12 +5,14 @@ const stringify = require('csv-stringify').stringify
 const parse = require('csv-parse').parse
 const fs = require('fs');
 const path = require('path');
-//const jsdom = require("jsdom");
+const jsdom = require("jsdom");
 // lettura file scuole.json
-const r = fs.readFileSync("scuole.json");
-var parser = JSON.parse(r);
+//const r = fs.readFileSync("scuole.json");
+//var parser = JSON.parse(r);
 
-var lista_scuole = new Array();
+let lista_scuole = JSON.parse(fs.readFileSync("scuole.json"));
+
+var contatore = 0;
 
 app.use(express.static('public'))
 
@@ -51,14 +53,15 @@ app.get('/scuole', (req, res) => {
                   AlunneFemmine: row[6]
               };
      lista_scuole.push(s);
-     parser.push(/*lista_scuole*/s);
+     contatore = contatore + 1;
+    // parser.push(/*lista_scuole*/s);
      //grado.push(row[2]);
     })
     .on("end", function () {
       
     //  parser.push(lista_scuole);
      // var json = JSON.stringify(lista_scuole);
-      fs.writeFileSync("scuole.json", JSON.stringify(parser));//, (err) => {
+      fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));//, (err) => {
         //if(err)
          // console.log("Errore.");
         //else 
@@ -77,28 +80,40 @@ app.get('/scuole', (req, res) => {
 
 // restituisce il file scuole.json
 app.get('/restituisci', (req, res) => {
-  if(r.length == 0){
+  if(lista_scuole.length == 0){
     res.sendStatus(404);
   } else {
-    res.send(parser);
+    res.send(lista_scuole);
+ //   console.log(lista_scuole);
   }
 });
 
 // NON FUNZIONA
 app.get('/tabella', (req, res) => {
-  var html = '<table>';
-  html += '<tr> <th>Anno scolastico</th><th>Codice identificativo</th><th></th> </tr>';
+  console.log("Carica tabella");
+  var html = '<table border="1">';
+  html += '<tr> <th> Id </th><th> Grado </th><th> Classi </th><th> Alunni maschi </th><th> Alunni femmine </th> </tr>';
+  for(let i = 0; i < lista_scuole.length; i++){
+    html += '<tr>';
+    html += '<td>' + JSON.stringify(lista_scuole[i].Id) + '</td><td>' + JSON.stringify(lista_scuole[i].Grado) + '</td>' + 
+            '<td>' + JSON.stringify(lista_scuole[i].Classi) + '</td><td>' + JSON.stringify(lista_scuole[i].AlunniMaschi) + '</td>' +
+            '<td>' + JSON.stringify(lista_scuole[i].AlunneFemmine) + '</td>';
+    html += '</tr>';
+  }
+  html += '</table>';
+ // document.getElementById("tabella").innerHTML = html;
+  res.send(html);
  // document.getElementById("tabella").innerHTML = html; 
 });
 
 // restituisce la scuola in posizione i-esima
 app.get('/search', (req, res) => {
   const i = req.query.index;
-  if(parser.length < i){
+  if(lista_scuole.length < i){
     res.type('text/plain').send("Indice non coerente con il numere delle scuole.");
     // rimandare lo status -> conflitti tra due send
   }else{
-    res.json(parser[i]);
+    res.json(lista_scuole[i]);
   }
 });
 
@@ -107,21 +122,24 @@ app.post('/add', (req, res) => {
   const nuovaScuola = req.body;
  // console.log(nuovaScuola);
   lista_scuole.push(nuovaScuola);
-  parser.push(nuovaScuola);
-  fs.writeFileSync("scuole.json", JSON.stringify(parser));
+ // contatore = contatore + 1;
+  //parser.push(nuovaScuola);
+  fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
   res.send("Scuola aggiunta con successo.");
 });
 
 // PROBLEMA NEL RIAGGIORNARE IL FILE JSON ORIGINALE
 app.delete('/remove', (req, res) => {
   const i = req.query.position;
-  console.log(r.length);
+  //console.log(r.length);
   console.log(i);
-  if(r.length >= i && i >= 0){
-    parser.splice(parser[i], 1);// rimuovi l'elemento
+  if(/*r.length >= i && i >= 0*/ i <= lista_scuole.length){
+    //parser.splice(parser[i], 1);// rimuovi l'elemento
+    lista_scuole.splice(i, 1);
+   // contatore = contatore - 1;
     // aggiorno il JSON originale
-    fs.writeFileSync("scuole.json", "[]");
-    fs.writeFileSync("scuole.json", JSON.stringify(parser));
+ //   fs.writeFileSync("scuole.json", "[]");
+    fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
     res.send("Successo.");
   }else{
     res.send("Errore, indice incorretto.");
