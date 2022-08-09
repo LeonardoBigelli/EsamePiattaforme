@@ -23,29 +23,96 @@
     
     <div class="jumbotron text-center">
       <h1>Indice scuole paritarie</h1>
-      <p>Clicca sul bottone per inizializzare il server!</p> 
+     <!-- <p>Clicca sul bottone per inizializzare il server!</p> 
       <p>
         <form action="https://superficial-capable-beam.glitch.me/scuole" method="GET">
           <input type="submit" value="richiesta inizializzazione">
-        </form>
-      </p>
+        </form>            
+      </p>-->
+
+      <script>
+        window.addEventListener('load', caricaTabella);
+            
+        async function caricaTabella() {
+          const response = await fetch('/scuole');
+       }
+      </script>
+
     </div>
     
     <div class="container">
+      <h1>
+        Dati raccolti:  
+      </h1>
       <div class="row">
-        <div class="col-sm-4" id="tabella">
-          <p>
-             <h1>
-               Dati raccolti:  
-             </h1>
-            <form action="https://superficial-capable-beam.glitch.me/tabella" method="GET">
-              <input type="submit" value="visualizza tabella">
-            </form>
+        <div class="col-sm-4">
+          <input type="submit" value="visualizza tabella" id="visualizzatore">
+          <p id="tabella">
+             
+           <!-- <form action="https://gestione-scuole.glitch.me/tabella" method="GET"> -->
+
+       <!--     </form> -->
+            <script>
+              var bottone = document.getElementById("visualizzatore");
+              bottone.addEventListener('click', caricaTabella);
+
+              async function caricaTabella() {
+                const response = await fetch('/tabella');
+                document.getElementById("tabella").innerHTML = await response.text();
+              }
+            </script>
           </p>
         </div>
         <div class="col-sm-4">
+          <h1>
+            Inserisci una nuova scuola:
+          </h1>
           <p>
-            seconda colonna.
+            <form action="https://progetto-post.glitch.me/addFilm" method="POST">
+    
+              <div class="form-group">
+                <label for="Id">Identificativo: </label>
+                <input class="form-control" name="Id">
+              </div>
+
+              <div class="form-group">
+                <label for="Grado">Grado:</label>
+                <input class="form-control" name="Grado">
+              </div>
+
+              <div class="form-group">
+                <label for="Classi">Classi:</label>
+                <input class="form-control" name="Classi">
+              </div>
+
+              <div class="form-group">
+                <label for="AlunniMaschi">Alunni maschi:</label>
+                <input class="form-control" name="AlunniMaschi">
+              </div>
+              
+              <div class="form-group">
+                <label for="AlunneFemmine">Alunne femmine:</label>
+                <input class="form-control" name="AlunneFemmine">
+              </div>
+              
+              <button type="submit" value="Aggiungi scuola" class="btn" id="add">
+          
+              </button>
+
+            </form>
+          
+            <p id="addBox">
+            </p>
+          
+            <script>
+              var inserimento = document.getElementById("add");
+              inserimento.addEventListener('click', aggiungiScuola);
+
+              async function aggiungiScuola() {
+                const response = await fetch('/add');
+                document.getElementById("addBox").innerHTML = await response.text();
+              }
+            </script>
           </p>
         </div>
         <div class="col-sm-4">
