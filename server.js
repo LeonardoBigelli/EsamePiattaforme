@@ -120,6 +120,14 @@ app.get('/search', (req, res) => {
 // endpoint per aggiungere una scuola all'elenco
 app.post('/add', (req, res) => {
   const nuovaScuola = req.body;
+//  console.log(req.body);
+ /* let nuovaScuola = {
+                      Id: req.query.id,
+                      Grado: req.query.grado,
+                      Classi: req.query.classi,
+                      AlunniMaschi: req.query.maschi,
+                      AlunneFemmine: req.query.femmine
+                     };*/
  // console.log(nuovaScuola);
   lista_scuole.push(nuovaScuola);
  // contatore = contatore + 1;
