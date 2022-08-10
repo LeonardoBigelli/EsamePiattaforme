@@ -67,7 +67,7 @@
           <h1>
             Inserisci una nuova scuola:
           </h1>
-          <p>
+          <p><!--
             <form action="https://progetto-post.glitch.me/addFilm" method="POST">
     
               <div class="form-group">
@@ -100,16 +100,58 @@
               </button>
 
             </form>
-          
-            <p id="addBox">
+          -->
+            <p>
+              Identificativo:
+              <input type="text" id="id">
             </p>
+            <p>
+              Grado:
+              <input type="text" id="grado">
+            </p>
+            <p>
+              Classi:
+              <input type="text" id="classi">
+            </p>
+            <p>
+              Numero di alunni maschi:
+              <input type="text" id="maschi">
+            </p>
+            <p>
+              Numero di alunne femmine:
+              <input type="text" id="femmine">
+            </p>
+            <input type="submit" value="Inserisci scuola" id="inserimento">
+            <p id="addBox"> </p>
+            
           
             <script>
-              var inserimento = document.getElementById("add");
+              var inserimento = document.getElementById("inserimento");
               inserimento.addEventListener('click', aggiungiScuola);
 
               async function aggiungiScuola() {
-                const response = await fetch('/add');
+                var id = document.getElementById("id").value;
+                alert(id);
+                var grado = document.getElementById("grado").value;
+                var classi = document.getElementById("classi").value;
+                var maschi = document.getElementById("maschi").value;
+                var femmine = document.getElementById("femmine").value;
+                let data = {
+                            Id: id,
+                            Grado: grado,
+                            Classi: classi,
+                            AlunniMaschi: maschi,
+                            AlunneFemmine: femmine
+                           };
+                const setting = {
+                                  method: 'POST',
+                                  headers: {
+                                              Accept: 'application/json',
+                                              'Content-Type': 'application/json',
+                                            },
+                                  body: JSON.stringify(data)
+                                };
+                const response = await fetch('/add', setting);
                 document.getElementById("addBox").innerHTML = await response.text();
               }
             </script>
