@@ -41,11 +41,12 @@
     </div>
     
     <div class="container">
-      <h1>
-        Dati raccolti:  
-      </h1>
+      
       <div class="row">
         <div class="col-sm-4">
+          <h1>
+            Dati raccolti:  
+          </h1>
           <input type="submit" value="visualizza tabella" id="visualizzatore">
           <p id="tabella">
              
@@ -131,7 +132,7 @@
 
               async function aggiungiScuola() {
                 var id = document.getElementById("id").value;
-                alert(id);
+             <!--   alert(id); -->
                 var grado = document.getElementById("grado").value;
                 var classi = document.getElementById("classi").value;
                 var maschi = document.getElementById("maschi").value;
@@ -143,24 +144,68 @@
                             AlunniMaschi: maschi,
                             AlunneFemmine: femmine
                            };
-                const setting = {
-                                  method: 'POST',
-                                  headers: {
-                                              Accept: 'application/json',
-                                              'Content-Type': 'application/json',
-                                            },
-                                  body: JSON.stringify(data)
-                                };
-                const response = await fetch('/add', setting);
-                document.getElementById("addBox").innerHTML = await response.text();
+                if(id != "" && grado != "" && classi != "" && maschi != "" && femmine != ""){
+                  const setting = {
+                                    method: 'POST',
+                                    headers: {
+                                                Accept: 'application/json',
+                                                'Content-Type': 'application/json',
+                                              },
+                                    body: JSON.stringify(data)
+                                  };
+                  const response = await fetch('/add', setting);
+                  document.getElementById("addBox").innerHTML = await response.text();
+                  <!-- ricarico la tabella -->
+                  const responseTable = await fetch('/tabella');
+                  document.getElementById("tabella").innerHTML = await responseTable.text();
+                } else {
+                  alert("Non si accettano campi vuoti!");
+                }
               }
             </script>
           </p>
         </div>
         <div class="col-sm-4">
+          <h1>
+            Rimuovi un record dalla tabella:
+          </h1>
           <p>
-            terza colonna
+            <input type="text" id="indice">
           </p>
+          <input type="submit" value="Elimina scuola" id="eliminazione">
+          <p id="removeBox"> </p>
+          
+          <script>
+            var eliminazione = document.getElementById("eliminazione");
+            eliminazione.addEventListener('click', rimuoviScuola);
+            
+            async function rimuoviScuola() {
+              posizione = document.getElementById("indice").value;
+              let data = {
+                            position: posizione
+                         };
+              const setting = {
+                                  method: 'DELETE',
+                                  headers: {
+                                              Accept: 'application/json',
+                                              'Content-Type': 'application/json',
+                                            },
+                                  
+                                };
+     <!--         alert(posizione); -->
+              if(posizione != ""){
+                const response = await fetch('/remove?position=' + posizione, setting);
+                document.getElementById("removeBox").innerHTML = await response.text();
+              <!--  document.getElementById("indice").innerHTML = " "; -->
+                <!-- ricarico la tabella -->
+                const responseTable = await fetch('/tabella');
+                document.getElementById("tabella").innerHTML = await responseTable.text();
+              } else {
+                alert("Campa invalido!");
+              }
+            }
+          </script>
+          
         </div>
       </div>
       

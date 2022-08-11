@@ -33,6 +33,7 @@ app.get('/home', (req, res) => {
 
 // get per ottenere tutte le scuole
 app.get('/scuole', (req, res) => {
+  let check = true;
   console.log("Lettura del file csv.");
   // variabile d'appoggio per memorizzare tutte le scuole
  // const lista_scuole = [];
@@ -42,6 +43,11 @@ app.get('/scuole', (req, res) => {
   fs.createReadStream(__dirname + '/views/dati.csv')
     .pipe(parse({ delimiter: ",", from_line: 2}))
     .on("data", function (row) {
+      for(let i = 0; i < lista_scuole.length; i++){
+        if(row[1] == lista_scuole[i].Id){
+          check = false;
+        }
+      }
       console.log("Riga corrente " + row);
       console.log("Id: " + row[1]);
       console.log("Grado: " + row[2]);
@@ -52,8 +58,10 @@ app.get('/scuole', (req, res) => {
                   AlunniMaschi: row[5],
                   AlunneFemmine: row[6]
               };
-     lista_scuole.push(s);
-     contatore = contatore + 1;
+      if(check){
+        lista_scuole.push(s);
+        contatore = contatore + 1;
+      }
     // parser.push(/*lista_scuole*/s);
      //grado.push(row[2]);
     })
@@ -92,10 +100,10 @@ app.get('/restituisci', (req, res) => {
 app.get('/tabella', (req, res) => {
   console.log("Carica tabella");
   var html = '<table border="1">';
-  html += '<tr> <th> Id </th><th> Grado </th><th> Classi </th><th> Alunni maschi </th><th> Alunni femmine </th> </tr>';
+  html += '<tr> <th>#</th><th> Id </th><th> Grado </th><th> Classi </th><th> Alunni maschi </th><th> Alunni femmine </th> </tr>';
   for(let i = 0; i < lista_scuole.length; i++){
     html += '<tr>';
-    html += '<td>' + JSON.stringify(lista_scuole[i].Id) + '</td><td>' + JSON.stringify(lista_scuole[i].Grado) + '</td>' + 
+    html += '<td>' + (i+1) + '</td><td>' + JSON.stringify(lista_scuole[i].Id) + '</td><td>' + JSON.stringify(lista_scuole[i].Grado) + '</td>' + 
             '<td>' + JSON.stringify(lista_scuole[i].Classi) + '</td><td>' + JSON.stringify(lista_scuole[i].AlunniMaschi) + '</td>' +
             '<td>' + JSON.stringify(lista_scuole[i].AlunneFemmine) + '</td>';
     html += '</tr>';
@@ -119,6 +127,7 @@ app.get('/search', (req, res) => {
 
 // endpoint per aggiungere una scuola all'elenco
 app.post('/add', (req, res) => {
+  let check = true;
   const nuovaScuola = req.body;
 //  console.log(req.body);
  /* let nuovaScuola = {
@@ -129,19 +138,28 @@ app.post('/add', (req, res) => {
                       AlunneFemmine: req.query.femmine
                      };*/
  // console.log(nuovaScuola);
-  lista_scuole.push(nuovaScuola);
- // contatore = contatore + 1;
-  //parser.push(nuovaScuola);
-  fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
-  res.send("Scuola aggiunta con successo.");
+  for(let i = 0; i < lista_scuole.length; i++){
+    if(nuovaScuola.Id == lista_scuole[i].Id){
+      check = false;
+    }
+  }
+  if(check){
+    lista_scuole.push(nuovaScuola);
+   // contatore = contatore + 1;
+    //parser.push(nuovaScuola);
+    fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
+    res.send("Scuola aggiunta con successo.");
+  } else {
+    res.send("Scuola gia' esistente nel db");
+  }
 });
 
 // PROBLEMA NEL RIAGGIORNARE IL FILE JSON ORIGINALE
 app.delete('/remove', (req, res) => {
-  const i = req.query.position;
+  const i = req.query.position - 1;
   //console.log(r.length);
   console.log(i);
-  if(/*r.length >= i && i >= 0*/ i <= lista_scuole.length){
+  if(/*r.length >= i && i >= 0*/ i <= lista_scuole.length && i >= 0){
     //parser.splice(parser[i], 1);// rimuovi l'elemento
     lista_scuole.splice(i, 1);
    // contatore = contatore - 1;
