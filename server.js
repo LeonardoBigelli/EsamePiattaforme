@@ -96,10 +96,9 @@ app.get('/restituisci', (req, res) => {
   }
 });
 
-// NON FUNZIONA
 app.get('/tabella', (req, res) => {
   console.log("Carica tabella");
-  var html = '<table border="1">';
+  var html = '<table border="1" class="table">';
   html += '<tr> <th>#</th><th> Id </th><th> Grado </th><th> Classi </th><th> Alunni maschi </th><th> Alunni femmine </th> </tr>';
   for(let i = 0; i < lista_scuole.length; i++){
     html += '<tr>';
@@ -151,6 +150,28 @@ app.post('/add', (req, res) => {
     res.send("Scuola aggiunta con successo.");
   } else {
     res.send("Scuola gia' esistente nel db");
+  }
+});
+
+// endpoint per modificare un paramentro di una scuola
+app.put('/update', (req, res) => {
+  const scuolaTmp = req.body;
+  let indiceTmp; 
+  let check = false;
+  console.log(scuolaTmp);
+  // controllo se e' presente una scuola con quell'id da modificare
+  for(let i = 0; i < lista_scuole.length; i++){
+    if(scuolaTmp.Id == lista_scuole[i].Id){
+      indiceTmp = i;
+      check = true;
+    }
+  }
+  if(check){
+    lista_scuole[indiceTmp] = scuolaTmp;
+    fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
+    res.send(200);
+  }else{
+    res.send(400);
   }
 });
 
