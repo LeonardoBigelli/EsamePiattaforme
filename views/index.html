@@ -5,13 +5,15 @@
   <head>
 
     <meta charset="utf-8">
-
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
+    
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="A cool thing made with Glitch">
     
     <title>Scuole</title>
@@ -21,7 +23,7 @@
         display: none;
         position: fixed;
         bottom: 20px;
-        right: 30px;
+        left: 30px;
         z-index: 99;
         font-size: 18px;
         border: none;
@@ -36,8 +38,21 @@
       #tornaSopra:hover {
         background-color: #555;
       }
+      
+      div.sticky {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        background-color: yellow;
+        padding: 10px;
+        font-size: 15px;
+      }
+      
+      .affix {
+        top: 20px;
+        z-index: 9999 !important;
+      }  
     </style>
-
   </head>
 
   <body>
@@ -45,14 +60,14 @@
     <div class="jumbotron text-center">
       <h1>Indice scuole paritarie</h1>
 
-      <script>
-        window.addEventListener('load', caricaTabella);
+      <!-- chiamata all'endpoint per caricare i dati dal csv -->
+  <!--    <script>
+        window.addEventListener('load', caricaDati);
             
-        async function caricaTabella() {
+        async function caricadati() {
           const response = await fetch('/scuole');
        }
-      </script>
-
+      </script> -->
     </div>
     
     <div class="container">
@@ -64,10 +79,8 @@
           </h1>
           <input type="submit" value="visualizza tabella" id="visualizzatore">
           <p id="tabella">
-             
-           <!-- <form action="https://gestione-scuole.glitch.me/tabella" method="GET"> -->
 
-       <!--     </form> -->
+            <!-- chiamata all'endpoint per visualizzare la tabella con tutti i dati -->
             <script>
               var bottone = document.getElementById("visualizzatore");
               bottone.addEventListener('click', caricaTabella);
@@ -77,13 +90,19 @@
                 document.getElementById("tabella").innerHTML = await response.text();
               }
             </script>
+            
           </p>
-        </div>
-        <div class="col-sm-4">
-          <h1>
-            Inserisci una nuova scuola:
+        </div> <!-- div prima colonna --> 
+        <nav class="col-sm-4">
+          <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="205">
+
+          <h1> 
+            Inserisci/ modifica una scuola:
           </h1>
-          <p>
+            <p>
+              Riga da modificare:
+              <input type="text" id="index">
+            </p>
             <p>
               Identificativo:
               <input type="text" id="id">
@@ -91,6 +110,10 @@
             <p>
               Grado:
               <input type="text" id="grado">
+            </p>
+            <p>
+              Anno di corso:
+              <input type="text" id="AnnoDiCorso">
             </p>
             <p>
               Classi:
@@ -106,15 +129,60 @@
             </p>
             <input type="submit" value="Inserisci scuola" id="inserimento">
             <p id="addBox"> </p>
+            <!-- bottone per la modifica -->
+            <input type="submit" value="Modifica scuola" id="modifica">
+            (Necessario l'indice da voler modificare)
+            <p id="updateBox"> </p>
+
+          <h1>
+            Rimuovi un record dalla tabella:
+          </h1>
+          <p>
+            <input type="text" id="indice">
+          </p>
+          <input type="submit" value="Elimina scuola" id="eliminazione">
+          <p id="removeBox"> </p>
+          </ul>
+        </nav>
+
+          <!-- chiamata all'endpoint per eliminare una scuola -->
+          <script>
+            var eliminazione = document.getElementById("eliminazione");
+            eliminazione.addEventListener('click', rimuoviScuola);
             
-          
-            <script>
+            async function rimuoviScuola() {
+              posizione = document.getElementById("indice").value;
+              let data = {
+                            position: posizione
+                         };
+              const setting = {
+                                  method: 'DELETE',
+                                  headers: {
+                                              Accept: 'application/json',
+                                              'Content-Type': 'application/json',
+                                            },
+                                  
+                                };
+              if(posizione != ""){
+                const response = await fetch('/remove?position=' + posizione, setting);
+                document.getElementById("removeBox").innerHTML = await response.text();
+                <!-- ricarico la tabella -->
+                const responseTable = await fetch('/tabella');
+                document.getElementById("tabella").innerHTML = await responseTable.text();
+              } else {
+                alert("Campa invalido!");
+              }
+            }
+          </script>
+        
+          <!-- chimata all'endpoint per inserire una nuova scuola -->
+          <script>
               var inserimento = document.getElementById("inserimento");
               inserimento.addEventListener('click', aggiungiScuola);
 
               async function aggiungiScuola() {
                 var id = document.getElementById("id").value;
-             <!--   alert(id); -->
+                var annoCorso = document.getElementById("AnnoDiCorso").value;
                 var grado = document.getElementById("grado").value;
                 var classi = document.getElementById("classi").value;
                 var maschi = document.getElementById("maschi").value;
@@ -122,6 +190,7 @@
                 let data = {
                             Id: id,
                             Grado: grado,
+                            AnnoCorsoClasse: annoCorso,
                             Classi: classi,
                             AlunniMaschi: maschi,
                             AlunneFemmine: femmine
@@ -144,57 +213,23 @@
                   alert("Non si accettano campi vuoti!");
                 }
               }
-            </script>
-          </p>
-  <!--      </div>
-        <div class="col-sm-4"> -->
-          <h1>
-            Rimuovi un record dalla tabella:
-          </h1>
-          <p>
-            <input type="text" id="indice">
-          </p>
-          <input type="submit" value="Elimina scuola" id="eliminazione">
-          <p id="removeBox"> </p>
-          
-          <script>
-            var eliminazione = document.getElementById("eliminazione");
-            eliminazione.addEventListener('click', rimuoviScuola);
-            
-            async function rimuoviScuola() {
-              posizione = document.getElementById("indice").value;
-              let data = {
-                            position: posizione
-                         };
-              const setting = {
-                                  method: 'DELETE',
-                                  headers: {
-                                              Accept: 'application/json',
-                                              'Content-Type': 'application/json',
-                                            },
-                                  
-                                };
-     <!--         alert(posizione); -->
-              if(posizione != ""){
-                const response = await fetch('/remove?position=' + posizione, setting);
-                document.getElementById("removeBox").innerHTML = await response.text();
-              <!--  document.getElementById("indice").innerHTML = " "; -->
-                <!-- ricarico la tabella -->
-                const responseTable = await fetch('/tabella');
-                document.getElementById("tabella").innerHTML = await responseTable.text();
-              } else {
-                alert("Campa invalido!");
-              }
-            }
           </script>
-          
+    <!--      
           <h1>
-            Modifica un campo della tabella (con Id):
+            Modifica un campo della tabella (con indice):
           </h1>
           
+          <p>
+            Indice della tabella che si vuole modificare:
+            <input type="text" id="index">
+          </p>
           <p>
             Identificativo:
             <input type="text" id="idUpdate">
+          </p>
+          <p>
+            Anno di corso:
+            <input type="text" id="AnnoDiCorso">
           </p>
           <p>
             Grado:
@@ -214,26 +249,30 @@
           </p>
           <input type="submit" value="Modifica scuola" id="modifica">
           <p id="updateBox"> </p>
-          
+          -->
+        
+          <!-- chimata all'endpoint per modificare un record della tabella -->
           <script>
               var modifica = document.getElementById("modifica");
               modifica.addEventListener('click', modificaScuola);
 
               async function modificaScuola() {
-                var id = document.getElementById("idUpdate").value;
-             <!--   alert(id); -->
-                var grado = document.getElementById("gradoUpdate").value;
-                var classi = document.getElementById("classiUpdate").value;
-                var maschi = document.getElementById("maschiUpdate").value;
-                var femmine = document.getElementById("femmineUpdate").value;
+                var index = document.getElementById("index").value;
+                var id = document.getElementById("id").value;
+                var annoCorso = document.getElementById("AnnoDiCorso").value;
+                var grado = document.getElementById("grado").value;
+                var classi = document.getElementById("classi").value;
+                var maschi = document.getElementById("maschi").value;
+                var femmine = document.getElementById("femmine").value;
                 let data = {
                             Id: id,
                             Grado: grado,
+                            AnnoCorsoClasse: annoCorso,
                             Classi: classi,
                             AlunniMaschi: maschi,
                             AlunneFemmine: femmine
                            };
-                if(id != "" && grado != "" && classi != "" && maschi != "" && femmine != ""){
+                if(index != "" && id != "" && grado != "" && classi != "" && maschi != "" && femmine != ""){
                   const setting = {
                                     method: 'PUT',
                                     headers: {
@@ -242,29 +281,27 @@
                                               },
                                     body: JSON.stringify(data)
                                   };
-                  const response = await fetch('/update', setting);
+                  const response = await fetch('/update?position=' + index, setting);
                   document.getElementById("updateBox").innerHTML = await response.text();
                   <!-- ricarico la tabella -->
                   const responseTable = await fetch('/tabella');
                   document.getElementById("tabella").innerHTML = await responseTable.text();
+                } else if(index == ""){
+                  alert("Necessario l'indice del record da modificare");
                 } else {
                   alert("Non si accettano campi vuoti!");
                 }
               }
           </script>
-          
+         
         </div>
       </div>
-      
-    </div>
   
    <!-- Bottone per tornare in cima -->
    <button onclick="topFunction()" id="tornaSopra" title="Torna in cima">Top</button>
    <script>
-      //Get the button
       var mybutton = document.getElementById("tornaSopra");
 
-      // When the user scrolls down 20px from the top of the document, show the button
       window.onscroll = function() {scrollFunction()};
 
       function scrollFunction() {
