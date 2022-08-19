@@ -1,42 +1,72 @@
-# Hello Node!
+# Gestionale delle scuole parietarie
+## Progetto di Piattaforme Digitali per la gestione del Territorio
 
-This project includes a Node.js server script and a web page that connects to it. The front-end page presents a form the visitor can use to submit a color name, sending the submitted value to the back-end API running on the server. The server returns info to the page that allows it to update the display with the chosen color. 🎨
+Leonardo Bigelli   
+Matricola: 307059
 
-[Node.js](https://nodejs.org/en/about/) is a popular runtime that lets you run server-side JavaScript. This project uses the [Fastify](https://www.fastify.io/) framework and explores basic templating with [Handlebars](https://handlebarsjs.com/).
+### Scopo del servizio implementato
 
-## Prerequisites
+Il servizio permette di gestire un insieme di dati inerenti alle scuole parietarie italiane.
+L'insieme di dati è stato reperito dal sito "dati.istruzione.it", esso infatti fa parte della categoria degli opendata fornito
+in formato csv.
+Al suo interno sono presenti i codici identificativi delle scuole con il numero di studenti maschi e femmine iscritto
+in uno specifico anno di corso.
+In dettaglio, è possibile inserire nuove scuole, modificare quelle presenti oppure effettuare una eliminazione.
 
-You'll get best use out of this project if you're familiar with basic JavaScript. If you've written JavaScript for client-side web pages this is a little different because it uses server-side JS, but the syntax is the same!
+### Descrizione dell'architettura
 
-## What's in this project?
+Il servizio è basato sull'architettura client-server. Il server è stato realizzato tramite l'utilizzo dalla piattaforma
+"Glitch.com". 
+#### Scelte implementative:
+1. Durante l'avvio del server viene caricato il file csv e il suo contenuto viene convertito e salvato in un file JSON;
+2. Sono presenti dei controlli per evitare di inserire un nuovo record avente identificativo della scuola e anno di corso
+    già presenti all'interno del sistema;
+3. La scelta di convertire il file iniziale (csv) nel formato JSON è data da una maggiore facilità nel elaborare i dati 
+    in seguito;
+4. Nel server.js è presente una variabile locale "lista_scuole" utilizzata per memorizzare, nella sessione attuale, tutte 
+    le scuole presenti nel sistema. Questa strategia è utile per facilitare i controlli,infatti evita di andare a rileggere
+    il file JSON ogni volta.
+5. Alcuni endpoint non vengono utilizzati dal client fornito (index.html) in quanto non sono necessari. In particolare 
+    non vengono sfruttati l'endpoint per visualizzare un contenuto in singolo in quanto il client fornisce una rappresentazione
+    grafica tramite tabella e tutte le informazioni possono essere consultate tramite quest'ultima. Discorso equivalente per 
+    l'endpoint che restituisce tutto il contenuto memorizzato nel file JSON. Tuttavia sono presenti come API in quanto potrebbe 
+    non essere reperibile il client per una qualsiasi motivazione.
 
-← `README.md`: That’s this file, where you can tell people what your cool website does and how you built it.
+### Ducumentazione dell'API fornita 
 
-← `public/style.css`: The styling rules for the pages in your site.
+Di seguito sono riportate tutte le API che il servizio fornisce con una descrizione dettagliata del loro funzionamento.
+* GET:
 
-← `server.js`: The **Node.js** server script for your new site. The JavaScript defines the endpoints in the site back-end, one to return the homepage and one to update with the submitted color. Each one sends data to a Handlebars template which builds these parameter values into the web page the visitor sees.
+ 1. /home --> Permette di caricare la pagina principale del servizio che fungerà anche da client;
+ 2. /restituisci --> Fornisce l'elenco di tutti i dettagli delle scuole presenti nel sistema in formato JSON. 
+   In caso di assenza di dati verrà restituito il codice di errore 404;
+ 3. /tabella --> Con questo endpoint il server realizzerà una tabella in stile html con tutti i dati presenti nel sistema 
+   e restituirà appunto una stringa che se interpretata da un browser permetterà la visualizzazione di una tabella. 
+   La computazione di questa operazione richiederà qualche secondo in quanto la mole del OpenData è abbastanza significativa
+   (> 14000 dati);
+ 4. /search --> Tramite il passaggio di un'indice permette di restituire in formato JSON i dettagli della scuola della
+   posizione specificata. L'endpoint deve essere chiamato nel seguente formato "/search?index=...". In caso di indice non valido
+   verrà restituito l'errore codificato 406, altrimenti restituirà il JSON dell'informazione richiesta.
+   
+* POST:
+ 1. /add --> Permette l'inserimento nel sistema (file JSON) di nuove informazioni inerenti al numero di studenti di un 
+    determinato anno di corso di una scuola. Il passaggio dei dati deve essere effettuato tramite una richiesta POST con tutti i
+    dati presenti nel Body della richiesta stessa. In caso di esito positivo il sistema restituirà il codice 200 e i nuovi
+    dati verranno memorizzati nel file JSON. In caso contrario verrà restituito il codice 400 se si stia cercando di 
+    inserire un dato già presente.
+    
+* PUT:
+ 1. /update --> Permette la modifica dei dati di una scuola tramite un indice fornito. Questo endpoint deve essere formattato
+    in questo modo "/update?position=..." e come contenuto nella richiesta bisogna passarli il nuovo dato che poi verrà
+    utilizzato per sovrascivere il contenuto nella posizione scelta. Restituisce il codice 200 in caso di successo e 406 in caso 
+    di indice non corretto.
+    
+* DELETE
+ 1. /remove --> Permette l'eliminazione di un record presente nel file JSON.Restituisce il codice 200 in caso di successo e 406 in caso 
+    di indice non corretto.
+    
+### Messa online del servizio
 
-← `package.json`: The NPM packages for your project's dependencies.
-
-← `src/`: This folder holds the site template along with some basic data files.
-
-← `src/pages/index.hbs`: This is the main page template for your site. The template receives parameters from the server script, which it includes in the page HTML. The page sends the user submitted color value in the body of a request, or as a query parameter to choose a random color.
-
-← `src/colors.json`: A collection of CSS color names. We use this in the server script to pick a random color, and to match searches against color names.
-
-← `src/seo.json`: When you're ready to share your new site or add a custom domain, change SEO/meta settings in here.
-
-## Try this next 🏗️
-
-Take a look in `TODO.md` for next steps you can try out in your new site!
-
-___Want a minimal version of this project to build your own Node.js app? Check out [Blank Node](https://glitch.com/edit/#!/remix/glitch-blank-node)!___
-
-![Glitch](https://cdn.glitch.com/a9975ea6-8949-4bab-addb-8a95021dc2da%2FLogo_Color.svg?v=1602781328576)
-
-## You built this with Glitch!
-
-[Glitch](https://glitch.com) is a friendly community where millions of people come together to build web apps and websites.
-
-- Need more help? [Check out our Help Center](https://help.glitch.com/) for answers to any common questions.
-- Ready to make it official? [Become a paid Glitch member](https://glitch.com/pricing) to boost your app with private sharing, more storage and memory, domains and more.
+Il server non è sempre attivo. Per abilitare il tutto è necessario accedere alla piattaforma Glitch.com e aspettare qualche
+istante affinché il server parta. Il client potrebbe essere poco reattivo in quanto i dati da visualizzare non sono pochi, 
+come descritto in precedenza.
