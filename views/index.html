@@ -52,12 +52,22 @@
         top: 20px;
         z-index: 9999 !important;
       }  
+      
+      .div-titolo{
+        background-color:#99ebff;
+      }
+      
+      .bordo{
+        border: 2px solid red;
+        border-radius: 5px;
+      }    
     </style>
   </head>
 
-  <body>
+  <body style="background-color:#ccf5ff;">
     
-    <div class="jumbotron text-center">
+    <div class="jumbotron text-center div-titolo">
+      
       <h1>Indice scuole paritarie</h1>
 
       <!-- chiamata all'endpoint per caricare i dati dal csv -->
@@ -71,7 +81,7 @@
     </div>
     
     <div class="container">
-      
+            
       <div class="row">
         <div class="col-sm-8">
           <h1>
@@ -298,7 +308,7 @@
       </div>
   
    <!-- Bottone per tornare in cima -->
-   <button onclick="topFunction()" id="tornaSopra" title="Torna in cima">Top</button>
+    <button onclick="topFunction()" id="tornaSopra" title="Torna in cima">Torna in cima</button>
    <script>
       var mybutton = document.getElementById("tornaSopra");
 
