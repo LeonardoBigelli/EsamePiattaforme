@@ -129,7 +129,6 @@ app.post('/add', (req, res) => {
   }
 });
 
-// MODIFICARE TRAMITE INDICE!!!!!!!!!!!!!!!!!!!!!!!
 // endpoint per modificare un paramentro, o piu', di una scuola
 app.put('/update', (req, res) => {
   const i = req.query.position - 1;
