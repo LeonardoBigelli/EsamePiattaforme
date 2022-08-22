@@ -70,3 +70,50 @@ Di seguito sono riportate tutte le API che il servizio fornisce con una descrizi
 Il server non è sempre attivo. Per abilitare il tutto è necessario accedere alla piattaforma Glitch.com e aspettare qualche
 istante affinché il server parta. Il client potrebbe essere poco reattivo in quanto i dati da visualizzare non sono pochi, 
 come descritto in precedenza.
+
+### Test del sistema
+
+Seguono vari test effettuati attraverso il client raggiungibile attraverso il seguente endpoint https://gestione-scuole.glitch.me/home .
+
+1. Pagina del client:
+  ![Test 1](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/home.png?v=1661173227978)
+  
+2. Visualizzazione della tabella:     
+  Premendo il pulsante "Visualizza tabella" è possibile visualizzare tutti i dati salvati nel sistema. Necessario
+  qualche istante per elaborare le informazioni.
+  ![Test 2](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/Tabella.png?v=1661173281676)
+  
+3. Inserimento di una scuola:   
+  Compilando i campi presenti sulla destra della pagina e premendo il bottone "Inserisci scuola" verrà
+  inserita una scuola nel sistema e dopo qualche istante sarà possibile visualizzarla in fondo alla tabella.
+  QUest'ultima si aggiornerà da sola.
+  ![Test 3](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/Inserimento.png?v=1661173238399)
+  
+4. Inserimento errato:     
+  Se non vengono inseriti correttamente tutti i campi necessari per l'inserimento l'operazione verrà
+  rifiutata.
+  ![Test 4](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/Inserimento_errato.png?v=1661173248853)
+  
+5. Modifica di una scuola:   
+  Inserendo i nuovi valori da assegnare alla scuola e la relativa riga della tabella, una volta premuto il tasto di
+  modifica verrà sovrascritto il dato presente nel sistema e successivamente la tabella sarà ricaricata.
+  ![Test 5](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/Modifica.png?v=1661173259863)
+  
+6. Modifica errata:   
+  Se non viene segnalato il numero della riga da voler modificare l'operazione verrà annulata.
+  ![Test 6](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/Modifica_errata.png?v=1661173280495)
+  
+7. Eliminazione di una scuola:    
+  Inserendo il numero della riga della tabella da voler eliminare e premendo il tasto "Elimina scuola",
+  verranno eliminate dal sistema le informazioni riguardanti alla scuola in questione. La tabella poi
+  verrà aggiornata in automatico.
+  ![Test 7](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/Eliminazione.png?v=1661173215479)
+  Come si può notare la riga 14829 non è più presente.
+  
+8. Eliminazione errata:   
+  Se l'indice inserito non dovesse essere corretto verrà restituito un errore, ovvero valore non accettabile.
+  ![Test 8](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/Eliminazione_errata.png?v=1661173224287)
+  
+  
+L'esito di tutte le operazioni eseguite dal client è segnalato con un messaggio. Quest'ultimo rappresenta 
+il codice che restituisce il server a seconda dell'esito riscontrato.
