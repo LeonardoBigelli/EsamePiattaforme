@@ -27,48 +27,42 @@ app.get('/home', (req, res) => {
   res.render(__dirname + '/views/index.html');
 });
 
-// get per leggere e salvare tutte le scuole presenti nel file csv
-//app.get('/scuole', (req, res) => {
-  let check = true;// variabile per evitare di memorizzare scuole con id uguali
-  console.log("Lettura del file csv.");
+// lettura e salvataggio di tutte le scuole presenti nel file csv
+let check = true;// variabile per evitare di memorizzare scuole con id uguali
+console.log("Lettura del file csv.");
   
-  // lettura del file csv
-  fs.createReadStream(__dirname + '/views/dati.csv')
-    .pipe(parse({ delimiter: ",", from_line: 2}))// lettura dalla linea 2
-    .on("data", function (row) {
-      // controllo per scuole con id uguali
-      for(let i = 0; i < lista_scuole.length; i++){
-        if(row[1] == lista_scuole[i].Id && row[3] == lista_scuole[i].AnnoCorsoClasse){
-          check = false;
-        }
+// lettura del file csv
+fs.createReadStream(__dirname + '/views/dati.csv')
+  .pipe(parse({ delimiter: ",", from_line: 2}))// lettura dalla linea 2
+  .on("data", function (row) {
+    // controllo per scuole con id uguali
+    for(let i = 0; i < lista_scuole.length; i++){
+      if(row[1] == lista_scuole[i].Id && row[3] == lista_scuole[i].AnnoCorsoClasse){
+        check = false;
       }
-    /*  console.log("Riga corrente " + row);
-      console.log("Id: " + row[1]);
-      console.log("Grado: " + row[2]);*/
-      // variabile d'appoggio per memorizzare la scuola appena letta
-      let s = {
-                  Id: row[1],
-                  Grado: row[2],
-                  AnnoCorsoClasse: row[3],
-                  Classi: row[4],
-                  AlunniMaschi: row[5],
-                  AlunneFemmine: row[6]
-              };
-      if(check){
-        lista_scuole.push(s);
-      }
-    })
-    .on("end", function () {
-      // riscrivo il file contenente tutte le scuole
-      fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
-      console.log("Finito.");
-//      res.sendStatus(200);
-    })
-    .on("error", function (error) {
-      console.log("Errore di lettura.");
-//      res.sendStatus(404);
-    });
-//});
+    }
+    // variabile d'appoggio per memorizzare la scuola appena letta
+    let s = {
+                Id: row[1],
+                Grado: row[2],
+                AnnoCorsoClasse: row[3],
+                Classi: row[4],
+                AlunniMaschi: row[5],
+                AlunneFemmine: row[6]
+            };
+    if(check){
+      lista_scuole.push(s);
+    }
+  })
+  .on("end", function () {
+    // riscrivo il file contenente tutte le scuole
+    fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
+    console.log("Finito.");
+  })
+  .on("error", function (error) {
+    console.log("Errore di lettura.");
+  });
+
 
 // restituisce il file scuole.json
 app.get('/restituisci', (req, res) => {
@@ -121,10 +115,8 @@ app.post('/add', (req, res) => {
     lista_scuole.push(nuovaScuola);
     // riscrittura del file
     fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
-//    res.send("Scuola aggiunta con successo.");
     res.sendStatus(200);
   } else {
-//    res.send("Scuola gia' esistente nel db");
     res.sendStatus(400);
   }
 });
@@ -137,20 +129,6 @@ app.put('/update', (req, res) => {
   let indiceTmp; 
   let check = false;
   console.log(scuolaTmp);
- /* // controllo se e' presente una scuola con quell'id da modificare
-  for(let i = 0; i < lista_scuole.length; i++){
-    if(scuolaTmp.Id == lista_scuole[i].Id){
-      indiceTmp = i;
-      check = true;
-    }
-  }
-  if(check){
-    lista_scuole[indiceTmp] = scuolaTmp;
-    fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
-    res.send(200);
-  }else{
-    res.send(400);
-  }*/
   if(i <= lista_scuole.length && i >= 0){
     lista_scuole[i] = scuolaTmp;
     fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
@@ -162,16 +140,14 @@ app.put('/update', (req, res) => {
 
 // endpoint per rimuovere una scuola dal sistema, dato un indice
 app.delete('/remove', (req, res) => {
-  const i = req.query.position - 1;
+  const i = req.query.position - 1;// per eliminare il record effettivo che l'utente vede
   if(i <= lista_scuole.length && i >= 0){
     // rimuzione dell'elemento dalla lista locale
     lista_scuole.splice(i, 1);
     // riscrittura del file json con le scuole correnti
     fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
-//    res.send("Successo.");
     res.sendStatus(200);
   }else{
-//    res.send("Errore, indice incorretto.");
     res.sendStatus(406);
   }
 });
