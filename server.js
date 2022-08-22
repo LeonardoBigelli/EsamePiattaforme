@@ -94,11 +94,11 @@ app.get('/tabella', (req, res) => {
 // restituisce la scuola in posizione i-esima
 app.get('/search', (req, res) => {
   const i = req.query.index;
-  if(lista_scuole.length < i){
+  if(lista_scuole.length < i && i <= 0){
     res.type('text/plain').send("Indice non coerente con il numere delle scuole.");
     res.sendStatus(406);
   }else{
-    res.json(lista_scuole[i]);
+    res.json(lista_scuole[i - 1]);
   }
 });
 
