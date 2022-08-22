@@ -1,4 +1,4 @@
-# Gestionale delle scuole parietarie
+# Gestionale delle scuole paritarie
 ## Progetto di Piattaforme Digitali per la gestione del Territorio
 
 Leonardo Bigelli   
@@ -6,7 +6,7 @@ Matricola: 307059
 
 ### Scopo del servizio implementato
 
-Il servizio permette di gestire un insieme di dati inerenti alle scuole parietarie italiane.
+Il servizio permette di gestire un insieme di dati inerenti alle scuole paritarie italiane.
 L'insieme di dati è stato reperito dal sito "dati.istruzione.it", esso infatti fa parte della categoria degli opendata fornito
 in formato csv.
 Al suo interno sono presenti i codici identificativi delle scuole con il numero di studenti maschi e femmine iscritto
