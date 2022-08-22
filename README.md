@@ -117,3 +117,16 @@ Seguono vari test effettuati attraverso il client raggiungibile attraverso il se
   
 L'esito di tutte le operazioni eseguite dal client è segnalato con un messaggio. Quest'ultimo rappresenta 
 il codice che restituisce il server a seconda dell'esito riscontrato.
+
+Come citato in precedenza, non tutti gli endpoint sono utilizzati dal client in quanto grazie alla 
+visualizzazione grafica non sono necessari. Di seguito sono riportati i test eseguiti sugli endpoint 
+presi in questione tramite Postman.
+
+1. Test endpoint per fornire informazioni su una sola scuola:
+  ![TestP 1](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/Postman_ricerca.png?v=1661176245236)
+  Come si può notare vengono restituite le informazioni inerenti all'anno di corso di una scuola
+  dell'indice richiesto, in formato JSON.
+  
+2. Test endpoint per restituire tutte le informazioni nel sistema:
+  ![TestP 2](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/Postman_restituisci.png?v=1661176242980)
+  Con questa endpoint vengono restituiti in formato JSON tutte le scuole presenti nel sistema.
