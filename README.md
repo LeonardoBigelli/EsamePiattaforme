@@ -62,7 +62,7 @@ Di seguito sono riportate tutte le API che il servizio fornisce con una descrizi
     di indice non corretto.
     
 * DELETE
- 1. /remove --> Permette l'eliminazione di un record presente nel file JSON.Restituisce il codice 200 in caso di successo e 406 in caso 
+ 1. /remove --> Permette l'eliminazione di un record presente nel file JSON. Restituisce il codice 200 in caso di successo e 406 in caso 
     di indice non corretto.
     
 ### Messa online del servizio
@@ -86,7 +86,7 @@ Seguono vari test effettuati attraverso il client raggiungibile attraverso il se
 3. Inserimento di una scuola:   
   Compilando i campi presenti sulla destra della pagina e premendo il bottone "Inserisci scuola" verrà
   inserita una scuola nel sistema e dopo qualche istante sarà possibile visualizzarla in fondo alla tabella.
-  QUest'ultima si aggiornerà da sola.
+  Quest'ultima si aggiornerà da sola.
   ![Test 3](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/Inserimento.png?v=1661173238399)
   
 4. Inserimento errato:     
