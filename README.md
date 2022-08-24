@@ -32,7 +32,7 @@ Il servizio è basato sull'architettura client-server. Il server è stato realiz
     l'endpoint che restituisce tutto il contenuto memorizzato nel file JSON. Tuttavia sono presenti come API in quanto potrebbe 
     non essere reperibile il client per una qualsiasi motivazione.
 
-### Ducumentazione dell'API fornita 
+### Documentazione dell'API fornita 
 
 Di seguito sono riportate tutte le API che il servizio fornisce con una descrizione dettagliata del loro funzionamento.
 * GET:
