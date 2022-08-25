@@ -31,6 +31,9 @@ Il servizio è basato sull'architettura client-server. Il server è stato realiz
     grafica tramite tabella e tutte le informazioni possono essere consultate tramite quest'ultima. Discorso equivalente per 
     l'endpoint che restituisce tutto il contenuto memorizzato nel file JSON. Tuttavia sono presenti come API in quanto potrebbe 
     non essere reperibile il client per una qualsiasi motivazione.
+6. Per la realizzazione del client è stato utilizzato Bootstrap per ottenere una migliore visualizzazione grafica.
+7. Si ipotizza che il csv iniziale sia ben formattato e che durante l'inserimento di un nuovo record le informazioni
+  siano pertinenti.
 
 ### Documentazione dell'API fornita 
 
