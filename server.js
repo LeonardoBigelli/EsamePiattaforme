@@ -4,8 +4,6 @@ const app = express();
 const stringify = require('csv-stringify').stringify
 const parse = require('csv-parse').parse
 const fs = require('fs');
-const path = require('path');
-const jsdom = require("jsdom");
 
 // lettura del file json contenenti le scuole salvate in precedenza
 let lista_scuole = JSON.parse(fs.readFileSync("scuole.json"));// lista locale per lavorare piu' rapidamente
@@ -78,7 +76,7 @@ app.get('/restituisci', (req, res) => {
 app.get('/tabella', (req, res) => {
   console.log("Carica tabella");
   var html = '<table border="1" class="table">';
-  html += '<tr> <th>#</th><th> Id </th><th> Grado </th><th> Anno di corso </th><th> Classi </th><th> Alunni maschi </th><th> Alunni femmine </th> </tr>';
+  html += '<tr> <th>#</th><th> Id </th><th> Grado </th><th> Anno di corso </th><th> Classi </th><th> Alunni maschi </th><th> Alunne femmine </th> </tr>';
   for(let i = 0; i < lista_scuole.length; i++){
     html += '<tr>';
     html += '<td>' + (i+1) + '</td><td>' + JSON.stringify(lista_scuole[i].Id) + '</td><td>' + JSON.stringify(lista_scuole[i].Grado) + '</td>' + 
@@ -123,11 +121,9 @@ app.post('/add', (req, res) => {
 // endpoint per modificare un paramentro, o piu', di una scuola
 app.put('/update', (req, res) => {
   const i = req.query.position - 1;
-  console.log(i);
   const scuolaTmp = req.body;
   let indiceTmp; 
   let check = false;
-  console.log(scuolaTmp);
   if(i <= lista_scuole.length && i >= 0){
     lista_scuole[i] = scuolaTmp;
     fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
@@ -141,7 +137,7 @@ app.put('/update', (req, res) => {
 app.delete('/remove', (req, res) => {
   const i = req.query.position - 1;// per eliminare il record effettivo che l'utente vede
   if(i <= lista_scuole.length && i >= 0){
-    // rimuzione dell'elemento dalla lista locale
+    // rimozione dell'elemento dalla lista locale
     lista_scuole.splice(i, 1);
     // riscrittura del file json con le scuole correnti
     fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
