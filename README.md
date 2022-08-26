@@ -34,6 +34,21 @@ Il servizio è basato sull'architettura client-server. Il server è stato realiz
 6. Per la realizzazione del client è stato utilizzato Bootstrap per ottenere una migliore visualizzazione grafica.
 7. Si ipotizza che il csv iniziale sia ben formattato e che durante l'inserimento di un nuovo record le informazioni
   siano pertinenti.
+  
+#### Codici restituiti dal sistema
+Codice | Significato
+:-----: | :----: 
+200   | Ok
+400  | Richiesta sbagliata 
+404 | Contenuto non trovato
+406 | Valore non accettato
+
+#### Moduli importarti nel sistema
+1. Express = Framework utilizzato per realizzare le API.
+2. fs = Modulo che permette di accedere e lavorare con il FileSystem del sistema.
+3. ejs = Modulo che permette l'utilizzo di javascript nel sistema.
+4. csv-parse = Permette la conversione del testo csv in Array.
+  
 
 ### Documentazione dell'API fornita 
 
@@ -67,6 +82,12 @@ Di seguito sono riportate tutte le API che il servizio fornisce con una descrizi
 * DELETE
  1. /remove --> Permette l'eliminazione di un record presente nel file JSON. Restituisce il codice 200 in caso di successo e 406 in caso 
     di indice non corretto.
+    
+#### Esempio richiesta POST
+Per effettuare una richiesta POST per inserire un nuovo dato nel sistema, il client eseguirà una richiesta al server
+generando un eventuale body (se necessario) formattando i dati in maniera pertinente.
+Di seguito si noti come è stato formattato il pacchetto contenente la richiesta POST fatta al server.
+![Richiesta POST](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/Esempio_aggiunta.png?v=1661516478252)
     
 ### Messa online del servizio
 
