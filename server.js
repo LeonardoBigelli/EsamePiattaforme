@@ -1,7 +1,5 @@
 const express = require("express");
-var bodyParser = require('body-parser')
 const app = express();
-const stringify = require('csv-stringify').stringify
 const parse = require('csv-parse').parse
 const fs = require('fs');
 
@@ -124,7 +122,7 @@ app.put('/update', (req, res) => {
   const scuolaTmp = req.body;
   let indiceTmp; 
   let check = false;
-  if(i <= lista_scuole.length && i >= 0){
+  if(i < lista_scuole.length && i >= 0){
     lista_scuole[i] = scuolaTmp;
     fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
     res.sendStatus(200);
@@ -136,7 +134,7 @@ app.put('/update', (req, res) => {
 // endpoint per rimuovere una scuola dal sistema, dato un indice
 app.delete('/remove', (req, res) => {
   const i = req.query.position - 1;// per eliminare il record effettivo che l'utente vede
-  if(i <= lista_scuole.length && i >= 0){
+  if(i < lista_scuole.length && i >= 0){
     // rimozione dell'elemento dalla lista locale
     lista_scuole.splice(i, 1);
     // riscrittura del file json con le scuole correnti
