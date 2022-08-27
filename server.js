@@ -120,12 +120,21 @@ app.post('/add', (req, res) => {
 app.put('/update', (req, res) => {
   const i = req.query.position - 1;
   const scuolaTmp = req.body;
-  let indiceTmp; 
-  let check = false;
+  let indiceTmp;
+  let check = true;
   if(i < lista_scuole.length && i >= 0){
-    lista_scuole[i] = scuolaTmp;
-    fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
-    res.sendStatus(200);
+    for(let h = 0; h < lista_scuole.length; h++){
+      if(scuolaTmp.Id == lista_scuole[h].Id && scuolaTmp.AnnoCorsoClasse == lista_scuole[h].AnnoCorsoClasse){
+        check = false;
+      }
+    }
+    if(check){
+      lista_scuole[i] = scuolaTmp;
+      fs.writeFileSync("scuole.json", JSON.stringify(lista_scuole));
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(406);
+    }
   } else {
     res.sendStatus(406);
   }
