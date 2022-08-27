@@ -91,13 +91,12 @@ Di seguito si noti come è stato formattato il pacchetto contenente la richiesta
     
 ### Messa online del servizio
 
-Il server non è sempre attivo. Per abilitare il tutto è necessario accedere alla piattaforma Glitch.com e aspettare qualche
-istante affinché il server parta. Il client potrebbe essere poco reattivo in quanto i dati da visualizzare non sono pochi, 
-come descritto in precedenza.
+Il server non è sempre attivo. Per accedere al servizio è necessario accedere al client tramite il seguente endpoint
+https://gestione-scuole.glitch.me/home aspettando qualche istante si permette al server di avviarsi.
 
 ### Test del sistema
 
-Seguono vari test effettuati attraverso il client raggiungibile attraverso il seguente endpoint https://gestione-scuole.glitch.me/home .
+Seguono vari test effettuati attraverso il client.
 
 1. Pagina del client:
   ![Test 1](https://cdn.glitch.global/86045b4a-8134-4865-a556-ddd433e034eb/home.png?v=1661173227978)
